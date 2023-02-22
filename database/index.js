@@ -1,16 +1,28 @@
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fetcher');
+const mysql = require('mysql2');
+const Promise = require('bluebird');
 
-let repoSchema = mongoose.Schema({
-  // TODO: your schema here!
+db = mysql.createConnection({
+  host: 'localhost'
+  user: 'root',
+  database: 'RepoList'
+})
+
+db.connect((err) => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('Connected');
+  }
 });
 
-let Repo = mongoose.model('Repo', repoSchema);
-
-let save = (/* TODO */) => {
+let save = (input) => {
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
 }
 
-module.exports.save = save;
+let getRepos = () => {
+
+}
+
+module.exports.db = db;
