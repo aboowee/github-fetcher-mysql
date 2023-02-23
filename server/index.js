@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const {save: save} = require('../database/index')
 
 let app = express();
 
@@ -8,13 +9,17 @@ let app = express();
 // Webpack is configured to generate files in that directory and
 // this server must serve those files when requested.
 app.use(express.static(path.join(__dirname,'../client/dist')))
-
+app.use(express.json())
 
 app.post('/repos', function (req, res) {
   // TODO - your code here!
+  save(req.body.name);
+  res.send(200);
+
   // This route should take the github username provided
   // and get the repo information from the github API, then
   // save the repo information in the database
+
 });
 
 app.get('/repos', function (req, res) {

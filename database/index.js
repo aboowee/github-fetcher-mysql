@@ -1,11 +1,13 @@
 const mysql = require('mysql2');
 const Promise = require('bluebird');
+const $ = require('jquery');
+const {getReposByUsername} = require('../helpers/github');
 
 db = mysql.createConnection({
-  host: 'localhost'
+  host: 'localhost',
   user: 'root',
   database: 'RepoList'
-})
+});
 
 db.connect((err) => {
   if (err) {
@@ -16,13 +18,16 @@ db.connect((err) => {
 });
 
 let save = (input) => {
-  // TODO: Your code here
-  // This function should save a repo or repos to
-  // the MongoDB
+  getReposByUsername(input)
+  .then((data) => {
+    console.log('This is data in database', data);
+    // let params =
+    // db.query('INSERT INTO repos (user, repoDescription, repoName, repoURL, forks) VALUES (?, ?, ?, ?, ?', params)
+  })
 }
 
 let getRepos = () => {
 
 }
 
-module.exports.db = db;
+module.exports.save = save;

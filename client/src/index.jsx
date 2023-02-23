@@ -15,8 +15,8 @@ const App = () => {
   return (
     <div>
       <h1>Github Fetcher</h1>
-      <RepoList repos={repos}/>
       <Search onSearch={search}/>
+      <RepoList repos={repos}/>
     </div>
   );
 }
