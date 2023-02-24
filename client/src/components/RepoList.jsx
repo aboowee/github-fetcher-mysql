@@ -5,7 +5,13 @@ const RepoList = ({ repos }) => (
     <h4> Repo List Component </h4>
     There are {repos.length} repos.
     {repos.map((repo)=>(
-      <div>hi</div>
+      <div className='repoContainer' key={repo.id}>
+        <div>{repo.user}</div>
+        <div>{repo.repoName}</div>
+        <a href={repo.repoURL}>{repo.repoURL}</a>
+        <div>{repo.repoDescription}</div>
+        <div>{repo.forks}</div>
+      </div>
     ))}
   </div>
 )

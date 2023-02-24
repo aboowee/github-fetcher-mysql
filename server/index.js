@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
-const {save: save} = require('../database/index')
+const {save: save} = require('../database/index');
+const {getRepos: getRepos} = require('../database/index');
 
 let app = express();
 
@@ -13,8 +14,13 @@ app.use(express.json())
 
 app.post('/repos', function (req, res) {
   // TODO - your code here!
-  save(req.body.name);
-  res.send(200);
+  save(req.body.name)
+  .then((data)=>{
+    res.sendStatus(200);
+  })
+  .catch((error)=>{
+    res.sendStatus(500);
+  })
 
   // This route should take the github username provided
   // and get the repo information from the github API, then
@@ -25,6 +31,9 @@ app.post('/repos', function (req, res) {
 app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
+  getRepos()
+  .then(data => { console.log(data); res.send(data)})
+  .catch(error => { res.sendStatus(404)})
 });
 
 let port = 1128;

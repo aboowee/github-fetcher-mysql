@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
-const Promise = require('bluebird');
 const $ = require('jquery');
 const {getReposByUsername} = require('../helpers/github');
+const BlueBirdPromise = require('bluebird');
 
 db = mysql.createConnection({
   host: 'localhost',
@@ -18,16 +18,35 @@ db.connect((err) => {
 });
 
 let save = (input) => {
-  getReposByUsername(input)
+  return getReposByUsername(input)
   .then((data) => {
-    console.log('This is data in database', data);
-    // let params =
-    // db.query('INSERT INTO repos (user, repoDescription, repoName, repoURL, forks) VALUES (?, ?, ?, ?, ?', params)
+    let insertQueue = data.data.map(currentRepo => {
+      return new Promise((resolve, reject) => {
+        db.query('INSERT IGNORE INTO repos (user, repoDescription, repoName, repoURL, forks) VALUES (?, ?, ?, ?, ?)', [currentRepo.owner.login, currentRepo.description, currentRepo.name, currentRepo.html_url, currentRepo.forks], (err, result)=>{
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        })
+      })
+      return Promise.all(insertQueue);
+    })
+  })
+  .catch(err => {
+    console.log(err);
   })
 }
 
 let getRepos = () => {
-
+  return new Promise((resolve, reject) => {db.query('SELECT * FROM repos ORDER BY forks DESC LIMIT 25', (err, result) => {
+    if (err) {
+      reject(err);
+    } else {
+      resolve(result);
+    }
+  })})
 }
 
 module.exports.save = save;
+module.exports.getRepos = getRepos;
