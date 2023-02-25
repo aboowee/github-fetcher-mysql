@@ -18,11 +18,12 @@ db.connect((err) => {
 });
 
 let save = (input) => {
-  return getReposByUsername(input)
+
+  return (getReposByUsername(input)
   .then((data) => {
     let insertQueue = data.data.map(currentRepo => {
       return new Promise((resolve, reject) => {
-        db.query('INSERT IGNORE INTO repos (user, repoDescription, repoName, repoURL, forks) VALUES (?, ?, ?, ?, ?)', [currentRepo.owner.login, currentRepo.description, currentRepo.name, currentRepo.html_url, currentRepo.forks], (err, result)=>{
+        db.query('INSERT IGNORE INTO repos (user, repoDescription, repoName, repoURL, forks, userURL) VALUES (?, ?, ?, ?, ?, ?)', [currentRepo.owner.login, currentRepo.description, currentRepo.name, currentRepo.html_url, currentRepo.forks, currentRepo.owner.html_url], (err, result)=>{
           if (err) {
             reject(err);
           } else {
@@ -30,12 +31,12 @@ let save = (input) => {
           }
         })
       })
-      return Promise.all(insertQueue);
     })
+    return Promise.all(insertQueue);
   })
   .catch(err => {
     console.log(err);
-  })
+  }))
 }
 
 let getRepos = () => {

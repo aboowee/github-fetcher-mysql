@@ -7,15 +7,20 @@ import RepoList from './components/RepoList.jsx';
 const App = () => {
 
   const [repos, setRepos] = useState([]);
+  const [inserted, setInserted] = useState(0);
 
   const search = (term) => {
     $.ajax({
       method: "POST",
       url: "/repos",
       data: JSON.stringify({name: term}),
-      contentType: "application/json"
+      contentType: "application/json",
+      dataType: "json"
     })
-    .then((success)=>{getRepos()})
+    .then((success)=>{
+      setInserted(success.inserted);
+      getRepos();
+    })
     .catch((error)=>{console.log('Could not search: ', error)})
   }
 
@@ -41,7 +46,7 @@ const App = () => {
     <div>
       <h1>Github Fetcher</h1>
       <Search onSearch={search}/>
-      <RepoList repos={repos}/>
+      <RepoList repos={repos} inserted={inserted}/>
     </div>
   );
 }

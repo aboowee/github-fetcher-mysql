@@ -16,7 +16,8 @@ app.post('/repos', function (req, res) {
   // TODO - your code here!
   save(req.body.name)
   .then((data)=>{
-    res.sendStatus(200);
+    res.send(JSON.stringify({inserted: data.length}));
+    // res.sendStatus(200);
   })
   .catch((error)=>{
     res.sendStatus(500);
@@ -31,8 +32,9 @@ app.post('/repos', function (req, res) {
 app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
+
   getRepos()
-  .then(data => { console.log(data); res.send(data)})
+  .then(data => { res.send(data)})
   .catch(error => { res.sendStatus(404)})
 });
 
