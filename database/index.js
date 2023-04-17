@@ -23,7 +23,7 @@ let save = (input) => {
   .then((data) => {
     let insertQueue = data.data.map(currentRepo => {
       return new Promise((resolve, reject) => {
-        db.query('INSERT IGNORE INTO repos (user, repoDescription, repoName, repoURL, forks, userURL) VALUES (?, ?, ?, ?, ?, ?)', [currentRepo.owner.login, currentRepo.description, currentRepo.name, currentRepo.html_url, currentRepo.forks, currentRepo.owner.html_url], (err, result)=>{
+        db.query('INSERT IGNORE INTO repos (user, repoDescription, repoName, repoURL, forks, userURL) VALUES (?, ?, ?, ?, ?, ?)', [currentRepo.owner.login, currentRepo.description, currentRepo.name.toUpperCase(), currentRepo.html_url, currentRepo.forks, currentRepo.owner.html_url], (err, result)=>{
           if (err) {
             reject(err);
           } else {
@@ -39,8 +39,18 @@ let save = (input) => {
   }))
 }
 
+let removeRepos = (input) => {
+  return new Promise((resolve, reject) => {db.query(`DELETE FROM repos WHERE user = "${input}"`, (err, result) => {
+    if (err) {
+      reject(err);
+    } else {
+      resolve(result);
+    }
+  })})
+}
+
 let getRepos = () => {
-  return new Promise((resolve, reject) => {db.query('SELECT * FROM repos ORDER BY forks DESC LIMIT 25', (err, result) => {
+  return new Promise((resolve, reject) => {db.query('SELECT * FROM repos ORDER BY id DESC', (err, result) => { //ORDER BY forks DESC
     if (err) {
       reject(err);
     } else {
@@ -51,3 +61,4 @@ let getRepos = () => {
 
 module.exports.save = save;
 module.exports.getRepos = getRepos;
+module.exports.removeRepos = removeRepos;

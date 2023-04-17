@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const {save: save} = require('../database/index');
 const {getRepos: getRepos} = require('../database/index');
+const {removeRepos: removeRepos} = require('../database/index');
 
 let app = express();
 
@@ -37,6 +38,16 @@ app.get('/repos', function (req, res) {
   .then(data => { res.send(data)})
   .catch(error => { res.sendStatus(404)})
 });
+
+app.delete('/repos', function (req, res) {
+  removeRepos(req.body.name)
+  .then((data)=>{
+    res.send(JSON.stringify({removed: data.affectedRows}));
+  })
+  .catch((error)=>{
+    res.sendStatus(500);
+  })
+})
 
 let port = 1128;
 

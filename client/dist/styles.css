@@ -8,13 +8,18 @@ h1 {
 
 .repoContainer {
   border-color: black;
-  background: white;
+  background: rgb(212, 247, 238);
   border-width: 5px;
   border-style: double;
   padding: 20px;
   margin: 0.5%;
   border-radius: 10px;
   box-sizing: border-box;
+}
+
+.repoContainer:hover {
+  background-color: white;
+  /* background-color: aqua; */
 }
 
 #user {
@@ -25,6 +30,10 @@ h1 {
 #repoName {
   text-align: center;
   text-decoration: underline;
+}
+
+.sortButtons {
+  text-align: center;
 }
 
 /* .repoContainer {
